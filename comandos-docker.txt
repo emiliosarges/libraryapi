@@ -1,0 +1,27 @@
+#Rodar container
+
+docker run --name pgadmin4 -p 15432:80 -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=1234 --network library-network dpage/pgadmin4
+
+docker run --name librarydb -p 5432:5432 -e POSTGRES_PASSWORD=1234 -e POSTGRES_USER=admin -e POSTGRES_DB=library --network library-network postgres:16.13
+
+#criar rede
+docker network create library-network
+
+CREATE TABLE autor(
+	id uuid not null primary key,
+	nome varchar(100) not null,
+	data_nascimento date not null,
+	nacionalidade varchar(50) not null
+);
+
+CREATE TABLE livro(
+	id uuid not null primary key,
+	isbn varchar(20),
+	titulo varchar(150) not null,
+	data_publicacao date not null,
+	genero varchar(30) not null,
+	preco numeric(18,2),
+	id_auto uuid not null references autor(id),
+	constraint chk_genero check (genero in ('FICCAO', 'FANTASIA', 'MISTERIO', 'ROMANCE', 'MISTERIO', 'ROMANCE', 'BIOGRAFIA', 'CIENCIA'))
+)
+
