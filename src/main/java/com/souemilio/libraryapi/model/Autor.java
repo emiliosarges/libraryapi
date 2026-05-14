@@ -1,7 +1,6 @@
-package com.souemilio.libraryapi.config.model;
+package com.souemilio.libraryapi.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package com.souemilio.libraryapi.config.model;
+package com.souemilio.libraryapi.model;
 
 public enum GeneroLivro {
     FICCAO,
