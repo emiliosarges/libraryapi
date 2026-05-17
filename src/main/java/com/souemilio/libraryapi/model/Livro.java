@@ -30,10 +30,10 @@ public class Livro {
     @Column(name = "genero", nullable = false, length = 30)
     private GeneroLivro genero;
 
-    @Column(name = "preco", precision = 18, scale = 2 )
+    @Column(name = "preco", precision = 18 )
     private BigDecimal preco;
 
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_autor")
-    @ManyToOne
     private Autor autor;
 }
