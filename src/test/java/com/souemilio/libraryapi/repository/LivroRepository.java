@@ -38,6 +38,27 @@ class LivroRepositoryTest {
         livroRepository.save(livro);
     }
 
+    @Test //Aqui funciona sem o cascade
+    void salvarAutorELivroTest() {
+        Livro livro = new Livro();
+        livro.setIsbn("456");
+        livro.setPreco(BigDecimal.valueOf(200));
+        livro.setGenero(GeneroLivro.CIENCIA);
+        livro.setTitulo("Terceiro Livro");
+        livro.setDataPublicacao(LocalDate.of(2000,5,17));
+
+        Autor autor = new Autor();
+        autor.setNome("Rodolfo");
+        autor.setNacionalidade("Indiano");
+        autor.setDataNascimento(LocalDate.of(1888,1,20));
+
+        autorRepository.save(autor);
+
+        livro.setAutor(autor);
+
+        livroRepository.save(livro);
+    }
+
     @Test
     void salvarCascadeTest() {
         Livro livro = new Livro();
