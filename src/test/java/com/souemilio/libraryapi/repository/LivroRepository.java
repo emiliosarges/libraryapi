@@ -43,16 +43,17 @@ class LivroRepositoryTest {
         //Aqui funciona sem o cascade
     void salvarAutorELivroTest() {
         Livro livro = new Livro();
-        livro.setIsbn("456");
-        livro.setPreco(BigDecimal.valueOf(200));
+        livro.setIsbn("44585-55544");
+        livro.setPreco(BigDecimal.valueOf(115));
         livro.setGenero(GeneroLivro.CIENCIA);
-        livro.setTitulo("Terceiro Livro");
-        livro.setDataPublicacao(LocalDate.of(2000, 5, 17));
+        livro.setTitulo("Pistoleiro sem dedo");
+        livro.setDataPublicacao(LocalDate.of(1981, 05, 24));
 
         Autor autor = new Autor();
-        autor.setNome("Rodolfo");
-        autor.setNacionalidade("Indiano");
-        autor.setDataNascimento(LocalDate.of(1888, 1, 20));
+        autor.setNome("Reginaldo");
+        autor.setNacionalidade("Uruguaio");
+        autor.setDataNascimento(LocalDate.of(1966, 1, 5));
+
 
         autorRepository.save(autor);
 
@@ -123,7 +124,7 @@ class LivroRepositoryTest {
     }
 
     @Test
-    @Transactional  //LAZY - Busca os dados do autor caso nescessário.
+    @Transactional  //Busca os dados do autor caso nescessário. - Usar quando estiver usando LAZY no relacionamento (Abre uma transação)
     void buscarLivroTest() {
         UUID idLivro = UUID.fromString("19333e97-1959-45a4-b272-d421b62b3c2e");
         Livro livro = livroRepository.findById(idLivro).orElse(null);
@@ -134,4 +135,18 @@ class LivroRepositoryTest {
         System.out.println("AUTOR");
         System.out.println(livro.getAutor().getNome());
     }
+
+    @Test
+    void pesquisaPorTituloTest() {
+        var livros = livroRepository.findByTitulo("Os quatros cantos da mesa redonda");
+        livros.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorIsbnTest() {
+        List<Livro> livros = livroRepository.findByIsbn("20251-20262");
+        livros.forEach(System.out::println);
+    }
+
+
 }

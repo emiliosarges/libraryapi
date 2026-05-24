@@ -20,4 +20,11 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
         ON a.id = l.id_autor
     """, nativeQuery = true)
     List<LivroAutorProjection> findByAutorAndTitulo();
+
+    //QUery Method
+    List<Livro> findByAutor(Autor autor);
+
+    List<Livro> findByTitulo(String titulo);
+
+    List<Livro> findByIsbn(String isbn);
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(name = "autor", schema = "public")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"livros"})
 public class Autor {
     @Id
     @GeneratedValue(strategy =GenerationType.UUID)
@@ -29,7 +29,7 @@ public class Autor {
     @Column(name = "nacionalidade", length = 100, nullable = false)
     private String nacionalidade;
 
-    //@OneToMany(mappedBy = "autor")
-    @Transient
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //@Transient  -> serve para dizer que um atributo da entidade não deve ser persistido no banco de dados.
     private List<Livro> livros;
 }
