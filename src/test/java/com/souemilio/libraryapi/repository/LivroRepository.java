@@ -148,5 +148,45 @@ class LivroRepositoryTest {
         livros.forEach(System.out::println);
     }
 
+    @Test
+    void pesquisaPorTituloEPrecoTest() {
+        List<Livro> livros = livroRepository.findByTituloAndPreco("Pistoleiro sem dedo", BigDecimal.valueOf(115.00));
+        livros.forEach(System.out::println);
+    }
 
+    @Test
+    void listarLivrosComQueryJPQLTest(){
+        List<Livro> resltado = livroRepository.listarTodosOrdenadoPorTituloAndPreco();
+        resltado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarAutoresDoLivroTest() {
+        var autores = livroRepository.listarAutoresDosLivros();
+        autores.forEach(System.out::println);
+    }
+
+    @Test
+    void listarTitulosNaoRepitidosDosLivrosTest() {
+        List<String> livrosNaoRepetidos = livroRepository.listarNomesDiferentesLivros();
+        livrosNaoRepetidos.forEach(System.out::println);
+    }
+
+    @Test
+    void listarGeneroDosAutoresMexicanosTest() {
+        var genero = livroRepository.listarGenerosAutoresMexicanos();
+        genero.forEach(System.out::println);
+    }
+
+    @Test
+    void listarLivrosPorGeneroTest() {
+        var livros = livroRepository.findByGenero(GeneroLivro.CIENCIA, "DataPublicacao");
+        livros.forEach(System.out::println);
+    }
+
+    @Test
+    void listarLivrosPorGeneroPositionalParametersTest() {
+        var livros = livroRepository.findByGeneroPositionalParameters(GeneroLivro.CIENCIA, "DataPublicacao");
+        livros.forEach(System.out::println);
+    }
 }
