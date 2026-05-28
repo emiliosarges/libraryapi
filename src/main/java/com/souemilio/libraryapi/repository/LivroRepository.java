@@ -4,7 +4,9 @@ import com.souemilio.libraryapi.model.Autor;
 import com.souemilio.libraryapi.model.GeneroLivro;
 import com.souemilio.libraryapi.model.Livro;
 import com.souemilio.libraryapi.projection.LivroAutorProjection;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -73,5 +75,15 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     List<Livro> findByGeneroPositionalParameters(
             GeneroLivro  generoLivro,
             String paramOdenacao);
+
+    @Modifying
+    @Transactional
+    @Query("delete from Livro where genero = ?1 ")
+    void deleteByGenero(GeneroLivro generoLivro);
+
+    @Modifying
+    @Transactional
+    @Query("update Livro set dataPublicacao = ?1 ")
+    void updateDataPublicacao(LocalDate novaData);
 
 }
