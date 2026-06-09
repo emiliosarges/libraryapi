@@ -21,6 +21,13 @@ public class AutorService {
         return autorRepository.save(autor);
     }
 
+    public void atualizar(Autor autor) {
+        if(autor.getId() == null) {
+            throw new IllegalArgumentException("Autor não encontrado na base de dados");
+        }
+        autorRepository.save(autor);
+    }
+
     public Optional<Autor> buscarAutorPorId(UUID id) {
         return autorRepository.findById(id);
     }
