@@ -2,6 +2,7 @@ package com.souemilio.libraryapi.service;
 
 import com.souemilio.libraryapi.model.Autor;
 import com.souemilio.libraryapi.repository.AutorRepository;
+import com.souemilio.libraryapi.validator.AutorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,12 +13,15 @@ import java.util.UUID;
 public class AutorService {
 
     private final AutorRepository autorRepository;
+    private final AutorValidator validator;
 
-    public AutorService(AutorRepository autorRepository) {
+    public AutorService(AutorRepository autorRepository, AutorValidator validator) {
         this.autorRepository = autorRepository;
+        this.validator = validator;
     }
 
     public Autor salvar(Autor autor) {
+        validator.validar(autor);
         return autorRepository.save(autor);
     }
 
@@ -25,6 +29,7 @@ public class AutorService {
         if(autor.getId() == null) {
             throw new IllegalArgumentException("Autor não encontrado na base de dados");
         }
+        validator.validar(autor);
         autorRepository.save(autor);
     }
 
