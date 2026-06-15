@@ -28,11 +28,11 @@ class LivroRepositoryTest {
         livro.setIsbn("123");
         livro.setPreco(BigDecimal.valueOf(100));
         livro.setGenero(GeneroLivro.FICCAO);
-        livro.setTitulo("Outro Livro");
+        livro.setTitulo("Livro Bom");
         livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
 
         Autor autor = autorRepository
-                .findById(UUID.fromString("16e6bde5-0002-4eb4-a8bc-0935f9123ef8"))
+                .findById(UUID.fromString("0d7ef2ee-b3b8-4965-bb9c-8cf7288f1e50"))
                 .orElse(null);
 
         livro.setAutor(new Autor());

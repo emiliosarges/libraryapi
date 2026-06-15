@@ -2,6 +2,7 @@ package com.souemilio.libraryapi.controller;
 
 import com.souemilio.libraryapi.controller.dto.AutorDTO;
 import com.souemilio.libraryapi.controller.dto.ErroResposta;
+import com.souemilio.libraryapi.exceptions.OperacaoNaoPemitidaException;
 import com.souemilio.libraryapi.exceptions.RegistroDuplicadoException;
 import com.souemilio.libraryapi.model.Autor;
 import com.souemilio.libraryapi.service.AutorService;
@@ -65,17 +66,22 @@ public class AutorController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deletar(@PathVariable String id) {
-        var idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional =  autorService.buscarAutorPorId(idAutor);
+    public ResponseEntity<Object> deletar(@PathVariable String id) {
+        try {
+            var idAutor = UUID.fromString(id);
+            Optional<Autor> autorOptional = autorService.buscarAutorPorId(idAutor);
 
-        if (autorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            if (autorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            autorService.deletar(autorOptional.get());
+
+            return ResponseEntity.noContent().build();
+        }catch (OperacaoNaoPemitidaException e) {
+            var erroResposta = ErroResposta.respostaPadrao(e.getMessage());
+            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
         }
-
-        autorService.deletar(autorOptional.get());
-
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -95,23 +101,28 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> atualizar(
+    public ResponseEntity<Object> atualizar(
             @PathVariable("id") String id, @RequestBody AutorDTO dto) {
 
-        var idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional =  autorService.buscarAutorPorId(idAutor);
+        try {
+            var idAutor = UUID.fromString(id);
+            Optional<Autor> autorOptional = autorService.buscarAutorPorId(idAutor);
 
-        if (autorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            if (autorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            var autor = autorOptional.get();
+            autor.setNome(dto.nome());
+            autor.setNacionalidade(dto.nacionalidade());
+            autor.setDataNascimento(dto.dataNascimento());
+
+            autorService.atualizar(autor);
+
+            return ResponseEntity.noContent().build();
+        } catch (RegistroDuplicadoException e) {
+            var erroDTO = ErroResposta.conflito(e.getMessage());
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
         }
-
-        var autor = autorOptional.get();
-        autor.setNome(dto.nome());
-        autor.setNacionalidade(dto.nacionalidade());
-        autor.setDataNascimento(dto.dataNascimento());
-
-        autorService.atualizar(autor);
-
-        return ResponseEntity.noContent().build();
     }
 }

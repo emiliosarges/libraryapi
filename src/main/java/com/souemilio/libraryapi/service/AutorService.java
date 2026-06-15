@@ -1,7 +1,9 @@
 package com.souemilio.libraryapi.service;
 
+import com.souemilio.libraryapi.exceptions.OperacaoNaoPemitidaException;
 import com.souemilio.libraryapi.model.Autor;
 import com.souemilio.libraryapi.repository.AutorRepository;
+import com.souemilio.libraryapi.repository.LivroRepository;
 import com.souemilio.libraryapi.validator.AutorValidator;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,12 @@ public class AutorService {
 
     private final AutorRepository autorRepository;
     private final AutorValidator validator;
+    private final LivroRepository livroRepository;
 
-    public AutorService(AutorRepository autorRepository, AutorValidator validator) {
+    public AutorService(AutorRepository autorRepository, AutorValidator validator, LivroRepository livroRepository) {
         this.autorRepository = autorRepository;
         this.validator = validator;
+        this.livroRepository = livroRepository;
     }
 
     public Autor salvar(Autor autor) {
@@ -38,7 +42,12 @@ public class AutorService {
     }
 
     public void deletar(Autor autor) {
-            autorRepository.delete(autor);
+        if(possuiLivro(autor)){
+            throw new OperacaoNaoPemitidaException(
+                    "Não permitido excluir: Autor possui livros cadastrados!"
+            );
+        }
+        autorRepository.delete(autor);
     }
 
     public List<Autor> pesquisa(String nome, String nacionalidade) {
@@ -55,5 +64,9 @@ public class AutorService {
         }
 
         return autorRepository.findAll();
+    }
+
+    public boolean possuiLivro(Autor autor) {
+        return livroRepository.existsByAutor(autor);
     }
 }

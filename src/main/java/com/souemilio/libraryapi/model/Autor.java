@@ -34,7 +34,8 @@ public class Autor {
     @Column(name = "nacionalidade", length = 100, nullable = false)
     private String nacionalidade;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY)
+            //cascade = CascadeType.ALL )
     //@Transient  -> serve para dizer que um atributo da entidade não deve ser persistido no banco de dados.
     private List<Livro> livros;
 
