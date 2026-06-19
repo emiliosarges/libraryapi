@@ -6,6 +6,7 @@ import com.souemilio.libraryapi.exceptions.OperacaoNaoPemitidaException;
 import com.souemilio.libraryapi.exceptions.RegistroDuplicadoException;
 import com.souemilio.libraryapi.model.Autor;
 import com.souemilio.libraryapi.service.AutorService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,7 +28,7 @@ public class AutorController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody AutorDTO autor) {
+    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO autor) {
         try {
             Autor autorEntidade = autor.mapearParaAutor();
             autorService.salvar(autorEntidade);
