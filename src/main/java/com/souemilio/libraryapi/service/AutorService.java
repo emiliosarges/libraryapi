@@ -79,6 +79,7 @@ public class AutorService {
 
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
+                .withIgnorePaths("id", "dataNascimento", "dataCadastro")
                 .withIgnoreNullValues()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
