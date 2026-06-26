@@ -2,6 +2,7 @@ package com.souemilio.libraryapi.controller;
 
 import com.souemilio.libraryapi.controller.dto.AutorDTO;
 import com.souemilio.libraryapi.controller.dto.ErroResposta;
+import com.souemilio.libraryapi.controller.mappers.AutorMapper;
 import com.souemilio.libraryapi.exceptions.OperacaoNaoPemitidaException;
 import com.souemilio.libraryapi.exceptions.RegistroDuplicadoException;
 import com.souemilio.libraryapi.model.Autor;
@@ -22,22 +23,27 @@ import java.util.stream.Collectors;
 public class AutorController {
 
     private final AutorService autorService;
+    private final AutorMapper mapper;
 
-    public AutorController(AutorService autorService) {
+    public AutorController(
+            AutorService autorService,
+            AutorMapper mapper
+    ) {
         this.autorService = autorService;
+        this.mapper = mapper;
     }
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO autor) {
+    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO dto) {
         try {
-            Autor autorEntidade = autor.mapearParaAutor();
-            autorService.salvar(autorEntidade);
+            Autor autor = mapper.toEntity(dto);
+            autorService.salvar(autor);
 
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(autorEntidade.getId())
+                    .buildAndExpand(autor.getId())
                     .toUri();
 
             return ResponseEntity.created(location).build();
@@ -51,19 +57,13 @@ public class AutorController {
     public ResponseEntity<AutorDTO> obterDetalhes(@PathVariable String id) {
 
         var idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional =  autorService.buscarAutorPorId(idAutor);
 
-        if (autorOptional.isPresent()) {
-            Autor autor = autorOptional.get();
-            AutorDTO dto = new AutorDTO(
-                    autor.getId(),
-                    autor.getNome(),
-                    autor.getDataNascimento(),
-                    autor.getNacionalidade());
-            return ResponseEntity.ok(dto);
-        }
-
-        return ResponseEntity.notFound().build();
+        return autorService
+                .buscarAutorPorId(idAutor)
+                .map(autor -> {
+                    AutorDTO dto = mapper.toDto(autor);
+                    return ResponseEntity.ok(dto);
+                }).orElseGet( () -> ResponseEntity.notFound().build() );
     }
 
     @DeleteMapping("{id}")
