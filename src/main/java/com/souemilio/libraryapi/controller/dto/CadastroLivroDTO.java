@@ -22,6 +22,7 @@ public record CadastroLivroDTO(
         GeneroLivro genero,
         BigDecimal preco,
         @NotNull(message = "campo obrigatório")
-        UUID idAutor) {
+        UUID idAutor
+) {
 
 }
