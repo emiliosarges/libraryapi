@@ -1,6 +1,6 @@
 package com.souemilio.libraryapi.service;
 
-import com.souemilio.libraryapi.exceptions.OperacaoNaoPemitidaException;
+import com.souemilio.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import com.souemilio.libraryapi.model.Autor;
 import com.souemilio.libraryapi.repository.AutorRepository;
 import com.souemilio.libraryapi.repository.LivroRepository;
@@ -49,7 +49,7 @@ public class AutorService {
 
     public void deletar(Autor autor) {
         if(possuiLivro(autor)){
-            throw new OperacaoNaoPemitidaException(
+            throw new OperacaoNaoPermitidaException(
                     "Não permitido excluir: Autor possui livros cadastrados!"
             );
         }
