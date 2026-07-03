@@ -2,6 +2,7 @@ package com.souemilio.libraryapi.controller.mappers;
 
 import com.souemilio.libraryapi.controller.dto.AutorDTO;
 import com.souemilio.libraryapi.controller.dto.CadastroLivroDTO;
+import com.souemilio.libraryapi.controller.dto.ResultadoPesquisaLivroDTO;
 import com.souemilio.libraryapi.model.Autor;
 import com.souemilio.libraryapi.model.Livro;
 import com.souemilio.libraryapi.repository.AutorRepository;
@@ -9,7 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = AutorMapper.class)
 public abstract class LivroMapper {
 
     @Autowired
@@ -19,4 +20,5 @@ public abstract class LivroMapper {
     public abstract Livro toEntity(CadastroLivroDTO dto);
 
 
+    public abstract ResultadoPesquisaLivroDTO toDTO(Livro livro);
 }
