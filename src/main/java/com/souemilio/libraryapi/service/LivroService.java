@@ -1,11 +1,14 @@
 package com.souemilio.libraryapi.service;
 
+import com.souemilio.libraryapi.model.GeneroLivro;
 import com.souemilio.libraryapi.model.Livro;
 import com.souemilio.libraryapi.repository.LivroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,6 +30,14 @@ public class LivroService {
 
     public void deletar(Livro livro) {
         livroRepository.delete(livro);
+    }
+
+    //isbn, titulo, nome, autor, genero, ano de publicacao
+    public List<Livro> pesquisa(
+            String isbn, String nomeAutor, GeneroLivro genero, Integer anoPublicacao
+    ){
+        Specification<Livro> specs = null;
+        return livroRepository.findAll(specs);
     }
 
 }
